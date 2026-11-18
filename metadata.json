@@ -1,0 +1,6 @@
+{
+  "name": "NexusFlow",
+  "description": "Visual IoT Telemetry & Rule Engine — industrial IoT monitoring, telemetry analytics, and automated workflow orchestration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
