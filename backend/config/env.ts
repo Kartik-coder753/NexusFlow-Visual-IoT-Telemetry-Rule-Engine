@@ -13,12 +13,11 @@ export interface AppConfig {
   appUrl: string | null;
 }
 
-const rawPort = Number(process.env.PORT ?? 3000);
 const envSecret = process.env.JWT_SECRET?.trim();
 
 export const env: AppConfig = {
   nodeEnv: process.env.NODE_ENV || 'development',
-  port: Number.isFinite(rawPort) && rawPort > 0 ? rawPort : 3000,
+  port: 3000, // Enforce port 3000 per environment constraints
   mongodbUri: process.env.MONGODB_URI?.trim() || null,
   jwtSecret: envSecret || 'nexusflow-dev-ephemeral-secret-change-in-production',
   jwtSecretConfigured: Boolean(envSecret),

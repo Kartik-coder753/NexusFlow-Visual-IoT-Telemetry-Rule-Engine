@@ -57,8 +57,19 @@ async function bootstrapServer(): Promise<void> {
   // Central error-handling middleware
   app.use(errorHandler);
 
-  app.listen(env.port, '0.0.0.0', () => {
+  const server = app.listen(env.port, '0.0.0.0', () => {
     console.info(`[NexusFlow] Server listening on http://0.0.0.0:${env.port} (${env.nodeEnv})`);
+  });
+
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(
+        `[NexusFlow] Port ${env.port} is already in use. Another server instance may be running.`
+      );
+      process.exit(0);
+    } else {
+      console.error('[NexusFlow] Server instance error:', err);
+    }
   });
 }
 
