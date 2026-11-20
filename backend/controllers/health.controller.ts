@@ -1,9 +1,11 @@
 import type { Request, Response } from 'express';
 import { getDatabaseStatus } from '../config/database.ts';
+import { getSafeRuntimeDiagnostics } from '../config/diagnostics.ts';
 import { env } from '../config/env.ts';
 
 export function getHealth(_req: Request, res: Response): void {
   const database = getDatabaseStatus();
+  const secretDiagnostics = getSafeRuntimeDiagnostics();
 
   res.status(200).json({
     success: true,
@@ -14,6 +16,7 @@ export function getHealth(_req: Request, res: Response): void {
     timestamp: new Date().toISOString(),
     uptimeSeconds: Math.round(process.uptime()),
     database,
+    environmentDiagnostics: secretDiagnostics,
     authentication: {
       passwordHashing: 'bcryptjs',
       tokenMechanism: 'jwt',
@@ -23,7 +26,7 @@ export function getHealth(_req: Request, res: Response): void {
         database.status === 'connected'
           ? []
           : [
-              'MONGODB_URI environment variable is not configured; persistent user registration and login require a MongoDB connection.',
+              'MONGODB_URI environment variable is not configured or reachable; persistent user registration and login require a MongoDB connection.',
             ],
     },
   });
